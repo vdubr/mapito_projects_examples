@@ -1,0 +1,22 @@
+{
+  "name": "mapito_projects_examples",
+  "version": "0.0.1",
+  "description": "Projects definitions and data for mapito_webmap",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vdubr/mapito_projects_examples.git"
+  },
+  "keywords": [
+    "data"
+  ],
+  "author": "Vojtěch Dubrovský",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vdubr/mapito_projects_examples/issues"
+  },
+  "homepage": "https://github.com/vdubr/mapito_projects_examples#readme"
+}
