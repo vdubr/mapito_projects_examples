@@ -1,6 +1,6 @@
 {
   "name": "mapito_projects_examples",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Projects definitions and data for mapito_webmap",
   "main": "index.js",
   "scripts": {
