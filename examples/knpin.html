@@ -1,0 +1,192 @@
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <script src="../mapito/js/proj4.js"></script>
+        <link rel="stylesheet" href="../mapito/css/ol.css" />
+    </head>
+    <body>
+        <div id='mapitoMap'></div>
+        <script src="../mapito/mapito.js"></script>
+        <script>
+          //EXAMPLE url
+          //http://localhost:8888/mapito/mapito_projects_examples/examples/knpin.html#pinY=50.0808953&pinX=15.9600839&x=15.96008&y=50.0809&z=8
+          var hashParams = location.hash.split('&');
+          if(hashParams.length > 1) {
+            var xy = [];
+            hashParams.forEach(function(p) {
+              var x = p.split("pinX=");
+              var y = p.split("pinY=");
+              if (x.length === 2) {
+                xy[0] = x[1]
+              } else if (y.length === 2) {
+                xy[1] = y[1]
+              }
+            })
+          }
+
+          if(xy.length === 0) {
+            console.error("No point found in hash params.");
+            //byst
+            var xy = [15.910091400146484,50.13056543852491];
+          }
+          //FIXME there you can change bridge coords, or choose array of them
+          var bridge = new ol.geom.Point(proj4('EPSG:4326','EPSG:3857',xy));
+          var bridgeCoords = bridge.getCoordinates();
+          //zoom extent is 100 meters around bridge
+          var zoomExtentDistance = 100;
+          var zoomExtent = [
+            bridgeCoords[0] - zoomExtentDistance,
+            bridgeCoords[1] - zoomExtentDistance,
+            bridgeCoords[0] + zoomExtentDistance,
+            bridgeCoords[1] + zoomExtentDistance
+          ];
+          //zoom extent is 10km meters around bridge
+          var mapExtentDistance = 10000;
+          var mapExtent = [
+            bridgeCoords[0] - mapExtentDistance,
+            bridgeCoords[1] - mapExtentDistance,
+            bridgeCoords[0] + mapExtentDistance,
+            bridgeCoords[1] + mapExtentDistance
+          ];
+
+
+
+          var projectOptions = {
+            "projection":"EPSG:3857",
+            "map":{
+              "init":{
+                "extent": zoomExtent,
+                "zoom":2
+              },
+              "extent": mapExtent,
+              "baseResolution":76.44,
+              "resolutionsLevels": 9,
+              "useURIcenter": false,
+              "events":["map:click"]
+            },
+            "layers":[
+              {
+                "type":"osm",
+                "config":{
+                  "name":"osm",
+                  "baselayer":true,
+                  "visible":true,
+                  "alpha":0,
+                  "reload":0,
+                  "tags":["podkladovka"]
+                  }
+              },
+              {
+                "type":"wms",
+                "specs":{
+                  "url":"http://services.cuzk.cz/wms/wms.asp",
+                  "layers":"dalsi_p_mapy,hranice_parcel,obrazy_parcel,parcelni_cisla,omp,RST_KMD,RST_KN",
+                  "tiled":true
+                },
+                "config":{
+                  "name":"Katastrální mapa ",
+                  "baselayer":false,
+                  "visible":true,
+                  "alpha":0,
+                  "reload":0,
+                  "tags":["KN"]
+                  }
+              },
+              {
+                "type":"geojson",
+                "specs":{
+                  "styleId":1,
+                  "sourceProjection":"EPSG:4326",
+                  "destinationProjection":"EPSG:3857"
+                },
+                "config":{
+                  "id":"bridges",
+                  "name":"Mosty",
+                  "baselayer":false,
+                  "visible":true,
+                  "tags":[],
+                  "events":["feature:click"]
+                  }
+              }
+            ],
+            "theme":{},
+            "styles":[
+              {
+                "id":1,
+                "def":{
+                  "image": {
+                    "src":"../data/images/pin_48.png",
+                    "anchor":[0.5,1]
+                   }
+                }
+              }
+            ]
+          }
+
+          var addBridge = function() {
+            var bridgesLayer = mapitoApp.getLayerById('bridges');
+            var bridgesLayerSource = bridgesLayer.getSource();
+            // var wgsCoords = [15.910091400146484,50.13056543852491];
+            // var bridge = new ol.geom.Point(proj4('EPSG:4326','EPSG:3857',wgsCoords))
+            var bridgeFeature = new ol.Feature({
+              geometry: bridge
+            });
+            //Feature mush have "styleId_" that links to style definition
+            bridgeFeature.set('styleId_',1)
+            bridgesLayerSource.addFeature(bridgeFeature);
+            // var layerExtent = mapito.layer.getVectorExtent(bridgesLayer);
+            // mapitoApp.zoomToExtent([layerExtent[0] - 100,layerExtent[1] - 100,layerExtent[2] + 100,layerExtent[3] + 100])
+          };
+
+
+          var krovak = '+proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs'
+          var localConfig = {
+            target: 'mapitoMap',
+            //or its possible to define path with config.json
+            //path: "./config.json"
+            projectOptions: projectOptions
+          };
+          var mapitoApp = new mapito.App();
+
+          var onLoad = function() {
+            mapitoApp.init();
+            addBridge()
+          };
+
+          var mapClick = false;
+          var listener = function(type, evt) {
+            console.log(type, evt);
+            switch (type) {
+              case 'map:click':
+                mapClick = true;
+                //its important because feature click fire map click at first,
+                //then fires feature click
+
+                //FIXME its because chrome block popups
+                var myWindow = window.open('')
+                window.setTimeout(function(){
+                  if (mapClick) {
+                    var coords = evt.target.coordinate;
+                    var krovakCoords = proj4('EPSG:3857',krovak, coords)
+                    var url = 'http://nahlizenidokn.cuzk.cz/MapaIdentifikace.aspx?l=KN&x='+Math.round(krovakCoords[0],0)+'&y='+Math.round(krovakCoords[1],0);
+                    myWindow.location = url;
+                    // window.open(url,'_blank')
+                  } else {
+                    myWindow.close()
+                  }
+                },50)
+                break;
+              case 'feature:click':
+                mapClick = false;
+                //handler on click on feature
+                break;
+            }
+          };
+
+          mapitoApp.setOptions(/**@type {mapito.app.Options}*/(localConfig), onLoad);
+          mapitoApp.setEventListener(listener);
+        </script>
+    </body>
+</html>

@@ -5,8 +5,10 @@
       "extent" : [-951313.86, -1275181.81,-159398.12, -984126.34]
       },
   "map":{
-    "center":[-763194.76,	-1166403.61],
-    "zoom":9,
+    "init":{
+      "center":[-763194.76,	-1166403.61],
+      "zoom":9
+    },
     "baseResolution":156543.03391,
     "resolutionsLevels":21
   },
@@ -16,14 +18,13 @@
       "specs":{
         "url":"http://geoportal.cuzk.cz/WMS_ZM10_PUB/WMService.aspx",
         "layers":"GR_ZM10",
-        "tiled":true,
+        "tiled": false,
         "projection":"EPSG:5514"
       },
       "config":{
         "name":"Základní mapa 10",
         "baselayer":false,
         "visible":true,
-        "alpha":0,
         "reload":0,
         "tags":["ZM10,podkladovka"]
         }
@@ -31,9 +32,10 @@
     {
       "type":"geojson",
       "specs":{
-        "path":"./data/vector/3857/polygon.geojson",
+        "path":"../data/vector/3857/polygon.geojson",
         "styleId":1,
-        "projection":"EPSG:3857"
+        "sourceProjection":"EPSG:3857",
+        "destinationProjection":"EPSG:5514"
       },
       "config":{
         "name":"First vector",
@@ -45,9 +47,10 @@
       "type":"geojson",
       "specs":{
         "styleId":1,
-        "path":"./data/vector/3857/line.geojson",
+        "path":"../data/vector/3857/line.geojson",
         "style":"stylefunction",
-        "projection":"EPSG:3857"
+        "sourceProjection":"EPSG:3857",
+        "destinationProjection":"EPSG:5514"
       },
       "config":{
         "name":"First vector",
@@ -59,9 +62,10 @@
       "type":"geojson",
       "specs":{
         "styleId":2,
-        "path":"./data/vector/3857/point.geojson",
+        "path":"../data/vector/3857/point.geojson",
         "style":"stylefunction",
-        "projection":"EPSG:5514"
+        "sourceProjection":"EPSG:3857",
+        "destinationProjection":"EPSG:5514"
       },
       "config":{
         "name":"Trees",
@@ -70,12 +74,24 @@
         "tags":["Trees","Vector","aaa"]
         }
     },{
+      "type":"geojson",
+      "specs":{
+        "path":"../data/vector/5514/collection.geojson",
+      },
+      "config":{
+        "name":"Trees",
+        "baselayer":false,
+        "visible":true,
+        "tags":["Featurecollection"]
+        }
+    },{
       "type":"markers",
       "specs":{
         "styleId":3,
-        "path":"./data/vector/3857/markers.json",
+        "path":"../data/vector/3857/markers.json",
         "style":"stylefunction",
-        "projection":"EPSG:3857"
+        "sourceProjection":"EPSG:3857",
+        "destinationProjection":"EPSG:5514"
       },
       "config":{
         "name":"Markers 1",
@@ -106,7 +122,7 @@
       "id":2,
       "def":{
         "image": {
-          "src":"./data/images/tree.png",
+          "src":"../data/images/tree.png",
           "scale":0.2
          }
       }
@@ -115,7 +131,7 @@
       "id":3,
       "def":{
         "image": {
-          "src":"./data/images/vojta.jpg",
+          "src":"../data/images/vojta.jpg",
           "scale":0.2
          }
       }

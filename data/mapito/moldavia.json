@@ -9,7 +9,8 @@
     "baseResolution":1222.992452421875,
     "resolutionsLevels":11,
     "useURIcenter":false,
-    "extent": [2911593.302404433, 5680735.776786893, 3400790.2834295607, 6205399.538936342]
+    "extent": [2911593.302404433, 5680735.776786893, 3400790.2834295607, 6205399.538936342],
+    "events":["map:click"]
   },
   "layers":[
     {
@@ -24,10 +25,27 @@
         }
     },
     {
+      "type":"topojson",
+      "specs":{
+        "path":"../data/vector/4326/wellsTopo.json",
+        "styleId":1,
+        "style":"stylefunction",
+        "sourceProjection":"EPSG:4326",
+        "destinationProjection":"EPSG:3857"
+      },
+      "config":{
+        "id":"wells",
+        "name":"First vector",
+        "baselayer":false,
+        "visible":true,
+        "tags":["Vector","aaa"],
+        "events":["feature:click"]
+        }
+    },{
       "type":"geojson",
       "specs":{
-        "path":"./data/vector/4326/wells.geojson",
-        "styleId":1,
+        "path":"../data/vector/4326/wells.geojson",
+        "styleId":2,
         "style":"stylefunction",
         "sourceProjection":"EPSG:4326",
         "destinationProjection":"EPSG:3857"
@@ -49,7 +67,15 @@
       "id":1,
       "def":{
         "image": {
-          "src":"./data/images/tree.png",
+          "src":"../data/images/tree.png",
+          "scale":1
+         }
+      }
+    },{
+      "id":2,
+      "def":{
+        "image": {
+          "src":"../data/images/pin_48.png",
           "scale":1
          }
       }

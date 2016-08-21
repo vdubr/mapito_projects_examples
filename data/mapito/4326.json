@@ -1,19 +1,19 @@
 {
-  "projection":"EPSG:3857",
+  "projection":"EPSG:4326",
   "map":{
-    "center":[1653485.80,6293519.16],
-    "zoom":13,
-    "baseResolution":156543.03391,
-    "resolutionsLevels":21
+    "init":{
+      "center":[16.6,49.9],
+      "zoom":11
+    }
   },
   "layers":[
     {
-      "type":"wms",
-      "specs":{
-        "url":"http://geoportal.cuzk.cz/WMS_ZM10_PUB/WMService.aspx",
-        "layers":"GR_ZM10",
-        "tiled":true,
-        "projection":"EPSG:3857"
+      "type": "wms",
+      "specs": {
+        "url": "http://geoportal.cuzk.cz/WMS_ZM10_PUB/WMService.aspx",
+        "layers": "GR_ZM10",
+        "tiled": false,
+        "projection": "EPSG:4326"
       },
       "config":{
         "name":"Základní mapa 10",
@@ -25,65 +25,11 @@
         }
     },
     {
-      "type":"tiled",
-      "specs":{
-        "url":"./data/raster/tiles4326/",
-        "projection":"EPSG:4326"
-      },
-      "config":{
-        "name":"Local tiled cr",
-        "baselayer":false,
-        "visible":true,
-        "alpha":0,
-        "reload":0,
-        "tags":["tiled"]
-        }
-    },
-    {
-      "type":"geojson",
-      "specs":{
-        "path":"./data/blanice.geojson",
-        "style":"stylefunction",
-        "projection":"EPSG:4326"
-      },
-      "config":{
-        "name":"First vector",
-        "baselayer":false,
-        "visible":true,
-        "tags":["Vector","aaa"]
-        }
-    },{
-      "type":"geojson",
-      "specs":{
-        "path":"./data/blanice_lines.geojson",
-        "style":"stylefunction",
-        "projection":"EPSG:4326"
-      },
-      "config":{
-        "name":"First vector",
-        "baselayer":false,
-        "visible":true,
-        "tags":["Vector","aaa"]
-        }
-    },{
-      "type":"geojson",
-      "specs":{
-        "path":"./data/blanice_points.geojson",
-        "style":"stylefunction",
-        "projection":"EPSG:4326"
-      },
-      "config":{
-        "name":"First vector",
-        "baselayer":false,
-        "visible":true,
-        "tags":["Vector","aaa"]
-        }
-    },{
       "type":"geojson",
       "specs":{
         "path":"http://mosty.mostar.cz/cron/geojson/07129.json",
         "style":"stylefunction",
-        "projection":"EPSG:4326"
+        "sourceProjection":"EPSG:4326"
       },
       "config":{
         "name":"Mosty",

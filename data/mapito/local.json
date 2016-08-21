@@ -1,16 +1,18 @@
 {
   "projection":"local",
   "map":{
-    "center":[1000, 1000],
-    "zoom":9,
-    "baseResolution":156543.03391,
-    "resolutionsLevels":21
+    "init":{
+      "center":[8000, 4000],
+      "zoom":2
+    },
+    "baseResolution":127.2792206135786,
+    "resolutionsLevels":10
   },
   "layers":[
     {
       "type":"localimage",
       "specs":{
-        "path":"./data/raster/local/test.jpg",
+        "path":"../data/raster/local/world.jpg",
         "size":[16200,8100]
       },
       "config":{
